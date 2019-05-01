@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdminMaster.cshtml";
+}
+
+
+<div class="row">
+    @*<div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="widget-panel widget-style-2 bg-white">
+                <i class="fa fa-plug  text-primary"></i>
+                <h2 class="m-0 text-dark counter font-600"><span data-plugin="counterup">58962</span></h2>
+                <div class="text-muted m-t-5">Today's Power</div>
+            </div>
+        </div>*@
+    <div class="col-md-6 col-lg-6 col-xl-6">
+        <div id="crdtoday" class="widget-panel widget-style-2 bg-white">
+            <i class="fa fa-bolt text-primary"></i>
+            <h4 class="m-0 text-dark counter font-600"><span id="cardtoday">0</span></h4>
+            <div class="text-muted m-t-5">Energy Produced - Today</div>
+        </div>
+    </div>
+    @*<div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="widget-panel widget-style-2 bg-white">
+                <i class="fa fa-plug  text-primary"></i>
+                <h2 class="m-0 text-dark counter font-600"><span data-plugin="counterup">895</span></h2>
+                <div class="text-muted m-t-5">Total Power</div>
+            </div>
+        </div>*@
+    @*<div class="col-md-6 col-lg-6 col-xl-6">
+            <div id="crdtotal" class="widget-panel widget-style-2 bg-white">
+                <i class="fa fa-bolt text-primary"></i>
+                <h4 class="m-0 text-dark counter font-600"><span id="cardtotal">0</span></h4>
+                <div class="text-muted m-t-5">Energy Produced - Total</div>
+            </div>
+        </div>*@
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-6">
+        <div class="portlet">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark">Inverter Wise Energy Produced - Today (kWh)</h3>
+                <div class="portlet-widgets">
+                    @*<input type="button" id="daterange" class="btn btn-success waves-effect waves-light input-daterange-datepicker" />*@
+                    @*<div class="btn-group dropdown">
+                            <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="ion-funnel"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Today</a>
+                                <a class="dropdown-item" href="#">Last 7 Days</a>
+                                <a class="dropdown-item" href="#">This Month</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#" onclick="OpenDateDialog('BarChart');">Custom</a>
+                            </div>
+                        </div>*@
+                    <span class="divider"></span>
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary" onclick="InverterGraph();"><i class="ion-refresh"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="bg-default1" class="panel-collapse collapse show">
+                <div class="portlet-body">
+                    <div id="morris-bar-example" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /Portlet -->
+    </div>
+    <!-- col -->
+    <div class="col-lg-12 col-xl-6">
+        <div class="portlet">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark">Energy Produced Plant - Last 30 Days (kWh)</h3>
+                <div class="portlet-widgets">
+                    @*<input type="button" id="daterange" class="btn btn-success" />*@
+                    @*<div class="btn-group dropdown">
+                            <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="ion-funnel"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Last 7 Days</a>
+                                <a class="dropdown-item" href="#">This Month</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#">Custom</a>
+                            </div>
+                        </div>*@
+                    <span class="divider"></span>
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary" onclick="InverterGraphArea();"><i class="ion-refresh"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="bg-default" class="panel-collapse collapse show">
+                <div class="portlet-body">
+                    <div id="dvchartarea" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /Portlet -->
+    </div>
+    <!-- col -->
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="portlet">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark text-uppercase">
+                    Inverter Wise  Todays (kWh)
+                </h3>
+                <div class="portlet-widgets">
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary"><i class="ion-refresh" onclick="GetCardsValue();"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="portlet2" class="panel-collapse collapse show">
+                <div class="portlet-body">
+                    <div class="table-responsive">
+                        <table id="tblInverter" class="table table-hover mails m-0 table table-actions-bar">
+                            <thead>
+                                <tr>
+                                    <th align="Left">Inverter Sr. No.</th>
+                                    <th align="right" style="text-align:right;">Day1</th>
+                                    @*<th align="right" style="text-align:right;">Day2</th>
+                                        <th align="right" style="text-align:right;">Day3</th>
+                                        <th align="right" style="text-align:right;">Day4</th>
+                                        <th align="right" style="text-align:right;">Day5</th>
+                                        <th align="right" style="text-align:right;">Day6</th>
+                                        <th align="right" style="text-align:right;">Day7</th>
+                                        <th align="right" style="text-align:right;">Total</th>*@
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
+
+<!-- sample modal content -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mt-0" id="myModalLabel">Custom Date Filter</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmdate" name="frmdate">
+                    <input type="hidden" id="txtfromdate" name="txtfromdate" />
+                    <input type="hidden" id="txttodate" name="txttodate" />
+                    <input type="hidden" id="txtcharttype" name="txtcharttype" />
+                </form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>From Date</h5>
+                        <div id="FromDate" class=""></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>From Date</h5>
+                        <div id="ToDate" class=""></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light">Filter</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+@section Scripts{    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            GetCardsValue();
+            //window.setTimeout(GetCardsValue(), 3000);
+        });
+
+        $('#FromDate').datepicker({
+            format: "mm/dd/yyyy",
+            todayBtn: "linked",
+            language: "de",
+            daysOfWeekDisabled: "0,6",
+            daysOfWeekHighlighted: "4",
+            todayHighlight: true,
+        }).on('changeDate', setFromDate);
+
+        $('#ToDate').datepicker({
+            format: "mm/dd/yyyy",
+            todayBtn: "linked",
+            language: "de",
+            daysOfWeekDisabled: "0,6",
+            daysOfWeekHighlighted: "4",
+            todayHighlight: true,
+        }).on('changeDate', setToDate);
+
+        function setFromDate() {
+            var value = $('#FromDate').datepicker('getFormattedDate');
+            $("#txtfromdate").val(value);
+        }
+        function setToDate() {
+            var value = $('#ToDate').datepicker('getFormattedDate');
+            $("#txttodate").val(value);
+        }
+
+        function testAnim(x) {
+            $('#crdtoday').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+            });
+            $('#crdtotal').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+            });
+        };
+
+        function GetCardsValue() {
+            $.post("/ChartReport/GetDashboardCards", null, function (json) {
+                $("#cardtoday").html(json.Today.EACString);
+                $("#cardtotal").html(json.Entire.EACString);
+                GetInverterTable(json.lstTable);
+            });
+            InverterGraph();
+            InverterGraphArea();
+        }
+
+        function getDate(days) {
+            var someDate = new Date();
+            var dd = someDate.getDate() + days;
+            var mm = someDate.getMonth() + 1;
+            var y = someDate.getFullYear();
+            var someFormattedDate = dd + '/' + mm + '/' + y;
+            return someFormattedDate;
+        }
+
+        function GetInverterTable(json) {
+            var Day1 = 0, Day2 = 0, Day3 = 0, Day4 = 0, Day5 = 0, Day6 = 0, Day7 = 0, GrandTotal = 0
+            $("#tblInverter > thead").empty();
+            $("#tblInverter > tbody").empty();
+            $("#tblInverter > tfoot").empty();
+
+            var tr = $('<tr/>');
+            tr.append("<th><b>Device Name</b></th>");
+            tr.append("<th><b>Inverter Sr. No.:</b></th>");
+            tr.append("<th ><b>" + getDate(-0) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-1) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-2) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-3) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-4) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-5) + "</b></th>");
+            //tr.append("<th ><b>" + getDate(-6) + "</b></th>");
+            //tr.append("<th ><b>Total</b></th>");
+            $("#tblInverter > thead").append(tr);
+
+
+            for (var i = 0; i < json.length; i++) {
+                var tr = $('<tr/>');
+                tr.append("<td>" + json[i].DeviceName + "</td>");
+                tr.append("<td>" + json[i].InverterSnNo + "</td>");
+                tr.append("<td >" + json[i].Day1 + "</td>"); Day1 = Day1 + json[i].Day1;
+                //tr.append("<td >" + json[i].Day2 + "</td>"); Day2 = Day2 + json[i].Day2;
+                //tr.append("<td >" + json[i].Day3 + "</td>"); Day3 = Day3 + json[i].Day3;
+                //tr.append("<td >" + json[i].Day4 + "</td>"); Day4 = Day4 + json[i].Day4;
+                //tr.append("<td >" + json[i].Day5 + "</td>"); Day5 = Day5 + json[i].Day5;
+                //tr.append("<td >" + json[i].Day6 + "</td>"); Day6 = Day6 + json[i].Day6;
+                //tr.append("<td >" + json[i].Day7 + "</td>"); Day7 = Day7 + json[i].Day7;
+                //tr.append("<td ><b>" + json[i].Total7Days + "</b></td>"); GrandTotal = GrandTotal + json[i].Total7Days;
+                $("#tblInverter > tbody").append(tr);
+            }
+            var tr = $('<tr/>');
+            tr.append("<td><b>Total:</b></td>");
+            tr.append("<td></td>");
+            tr.append("<td ><b>" + Day1.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day2.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day3.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day4.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day5.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day6.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + Day7.toFixed(2) + "</b></td>");
+            //tr.append("<td ><b>" + GrandTotal.toFixed(2) + "</b></td>");
+            $("#tblInverter > tfoot").append(tr);
+
+            //testAnim('tada');
+        }
+
+        function InverterGraph() {
+            $("#morris-bar-example").empty();
+            //morris-bar-example
+            $.post("/ChartReport/GetBarChartValue", null, function (json) {
+                Morris.Bar({
+                    element: 'morris-bar-example',
+                    data: json,
+                    xkey: 'label',
+                    ykeys: ['value'],
+                    labels: ['Energy Produced'],
+                    hideHover: 'auto',
+                    resize: true,
+                    xLabelAngle: 80
+                });
+            });
+        }
+
+        function InverterGraphArea() {
+            $("#dvchartarea").empty();
+            $.post("/ChartReport/GetBarAreaChartValue", null, function (json) {
+                new Morris.Bar({
+                    element: 'dvchartarea',
+                    data: json,
+                    xkey: 'label',
+                    ykeys: ['value'],
+                    labels: ['Energy Produced'],
+                    hideHover: 'auto',
+                    resize: true,
+                    gridLineColor: '#eef0f2',
+                    barColors: ['#3ac9d6'],
+                    xLabelAngle: 70
+                });
+            });
+        }
+
+        function OpenDateDialog(charttype) {
+            $('#myModal').modal('show')
+        }
+
+    </script>
+
+
+}

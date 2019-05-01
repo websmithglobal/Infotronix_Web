@@ -1,0 +1,380 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdminMaster.cshtml";
+}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-box">
+            @*<ol class="breadcrumb pull-right mb-0">
+                    <li class="breadcrumb-item"><a href="#">Ubold</a></li>
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Dashboard 1</li>
+                </ol>*@
+            <h4 class="page-title">Sub Device</h4>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-12">
+        <div class="card-box" style="padding-left:10px;">
+            <div class="col-lg-12" style="text-align:right;">
+                <input type="button" value="Add New" class="btn btn-primary btn-xs" onclick="CreateNew();" data-toggle="modal" data-target=".bs-example-modal-lg" />
+                <button class="btn btn-primary btn-xs" type="button" onclick="RefreshMaster();"><i class="ion-refresh"></i></button>
+            </div>
+            &nbsp;
+            <div class="table-responsive">
+                <table id="tblDisplay" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Device Name</th>
+                            <th>Sub Device Type</th>
+                            <th>Sub Device Name</th>
+                            <th>Serial No</th>
+                            <th>Make</th>
+                            <th>Location</th>
+                            <th>Installdate</th>
+                            <th>Address</th>
+                            <th>Ip Address</th>
+                            <th>FTP Folder</th>
+                            <th>Multiply Conversation</th>
+                            <th>Plant Unite Volume</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title mt-0">Sub Device Master</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div id="dvmessage"></div>
+                    <form role="form" id="frmSubDevice" name="frmSubDevice">
+                        <input type="hidden" id="SubDeviceId" name="SubDeviceId" />
+                        <input type="hidden" id="EntryMode" name="EntryMode" />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group-custom">
+                                    <select id="PlantID" name="PlantID">
+                                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                                        @foreach (Josheph.Framework.Entity.PlantMasterSUB el in ViewBag.PlantMaster)
+                                        {
+                                            <option value="@el.PlantId">@el.PlantName</option>
+                                        }
+                                    </select>
+                                    <label class="control-label">Plant Name</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group-custom">
+                                    <select id="DeviceId" name="DeviceId">
+                                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                                    </select>
+                                    <label class="control-label">Main Device Name</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group-custom">
+                                    <select id="SubDeviceType" name="SubDeviceType">
+                                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                                        <option value="1">Meter</option>
+                                        <option value="2">Inverter</option>
+                                    </select>
+                                    <label class="control-label">Sub Device Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="SubDeviceName" maxlength="100" name="SubDeviceName" />
+                                    <label class="control-label">Sub Device Name</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="SerialNo" maxlength="100" name="SerialNo" />
+                                    <label class="control-label">Serial No</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="Make" maxlength="100" name="Make" />
+                                    <label class="control-label">Make</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="Location" name="Location" />
+                                    <label class="control-label">Location</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input placeholder="dd/mm/yyyy" id="datepicker" name="InstallDate" type="text" OnBlur="return validate()" onkeypress="return false;" ondrop="return false;" onpaste="return false;">
+                                    <label class="control-label">InstallDate</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="Address" name="Address" />
+                                    <label class="control-label">Address</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="IpAddress" name="IpAddress" />
+                                    <label class="control-label">Ip Address</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="FTPFolder" name="FTPFolder" />
+                                    <label class="control-label">FTP Folder</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="FTPFilename" name="FTPFilename" />
+                                    <label class="control-label">File Name</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="FTPFileDateFormat" name="FTPFileDateFormat" />
+                                    <label class="control-label">File Date Format</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="PerFormsOfPlantUniteVolume" onkeyUp="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="6" name="PerFormsOfPlantUniteVolume" />
+                                    <label class="control-label">Performs of plant unite volume</label><i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group-custom">
+                                    <input type="text" id="MultiplyConversation" onkeyUp="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="6" name="MultiplyConversation" />
+                                    <label class="control-label">Multiply Conversation</label><i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="clearfix">
+                        <div class="pull-right mt-sm">
+                            <button class="ladda-button btn btn-primary" onclick="SaveEntry();" data-style="expand-right">Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tablelist;
+        $(document).ready(function () {
+
+            $("#PlantID").on("change", function (e) {
+                var contid1 = $("#PlantID").val();
+                BindDevice(contid1);
+            });
+
+            tablelist = $('#tblDisplay').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "sPaginationType": "full_numbers",
+                "info": true,
+                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                "ajax": {
+                    "url": "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))SubDeviceMaster/GetSubDeviceList",
+                    "type": "POST", "datatype": "json"
+                },
+                "aoColumns": [
+                { data: "DeviceName", "bSearchable": true, "orderable": true, "orderable": true },
+                { data: "SubDeviceTypeName", "bSearchable": true, "orderable": true, "orderable": true },
+                { data: "SubDeviceName", "bSearchable": true, "orderable": true, "orderable": true },
+                { data: "SerialNo", "bSearchable": true, "orderable": true, "orderable": true },
+                { data: "Make", "orderable": true, "orderable": true, "orderable": true },
+                { data: "Location", "orderable": true, "orderable": true, "orderable": true },
+                { data: "InstallDate", "orderable": true, "orderable": true, "orderable": true },
+                { data: "Address", "orderable": true, "orderable": true, "orderable": true },
+                { data: "IpAddress", "orderable": true, "orderable": true, "orderable": true },
+                { data: "FTPFolder", "orderable": true, "orderable": true, "orderable": true },
+                { data: "MultiplyConversation", "orderable": true, "orderable": true, "orderable": true },
+                { data: "PerformsOfPlantUniteVolume", "orderable": true, "orderable": true, "orderable": true },
+                {
+                    data: "Status", "bSearcable": true, "bSortable": true, "mRender": function (data, type, oObj) {
+                        if (oObj.Status == 1) {
+                            return "<button type='button' class='btn btn-success btn-sm waves-effect waves-light' onclick='StatusUpdate(&quot;" + oObj.SubDeviceId + "&quot;)'><i class='md md-done'></i></button>"
+                        } else { return "<button type='button' class='btn btn-danger btn-sm waves-effect waves-light' onclick='StatusUpdate(&quot;" + oObj.SubDeviceId + "&quot;)'><i class='md md-clear'></i></button>" }
+                    }
+                },
+                    {
+                        data: "SubDeviceId", "bSearchable": true, "bSortable": false, "mRender": function (data, type, oObj) {
+                            return '<a href="#" onclick="EditEntry(/' + oObj.SubDeviceId + '/)" class="btn btn-icon btn-sm  waves-effect btn-default waves-light"><i class="md md-mode-edit"></i></a>';
+                        },
+                    },
+                        {
+                            data: "SubDeviceId", "bSearchable": true, "bSortable": false, "mRender": function (data, type, oObj) {
+                                return '<a href="#" onclick="DeleteEntry(/' + oObj.SubDeviceId + '/)" class="btn btn-info btn-sm  waves-effect waves-light btn-danger"><i class="md md-delete"></i></a>';
+                            }
+                        },
+                ],
+            });
+            tablelist.init();
+        });
+
+        function BindDevice(palid, callback) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))MainDeviceMaster/GetDeviceByPlant",
+                data: { PlantID: palid },
+                success: function (data) {
+                    var elment = $("#DeviceId");
+                    elment.empty();
+                    elment.append('<option value="00000000-0000-0000-0000-000000000000">-Select-</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        elment.append('<option value="' + data[i].DeviceId + '">' + data[i].DeviceName + '</option>');
+                    }
+                    callback();
+                }
+            });
+        }
+
+
+        function CreateNew() {
+            $('#myModalLabel').html('Create New Sub Device');
+            $("#EntryMode").val('ADD');
+            $("#dvmessage").empty();
+            $("#PlantID").val("00000000-0000-0000-0000-000000000000");
+            $("#DeviceId").val("00000000-0000-0000-0000-000000000000");
+            $("#SubDeviceType").val("00000000-0000-0000-0000-000000000000");
+            $("#SubDeviceName").val("");
+            $("#SerialNo").val("");
+            $("#Location").val("");
+            $("#Make").val("");
+            $("#Address").val("");
+            $("#IpAddress").val("");
+            $("#FTPFolder").val("");
+            $("#FTPFilename").val("");
+            $("#FTPFileDateFormat").val("");
+            $("#MultiplyConversation").val("");
+            $("#PerFormsOfPlantUniteVolume").val("");
+            $('#datepicker').datepicker();
+            $('#datepicker').datepicker('setDate', 'today');
+            $('.bs-example-modal-lg').modal('show');
+        }
+
+
+        function SaveEntry() {
+
+            var CheckIP = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+            //alert($("#ipAddress").val());
+            if (!CheckIP.test($("#IpAddress").val()))
+            { swal("Error", "Your IP Address Is Not Valid.", "error"); return; }
+
+            var frmModel = $("#frmSubDevice").serialize();
+            $.post("../SubDeviceMaster/SaveEntry", frmModel, function (resdata) {
+                if (resdata.EntryStatus == true) {
+                    tablelist.draw();
+                    $('.bs-example-modal-lg').modal('hide')
+                    swal("Record Save Successfully", "", "success")
+                    tablelist.draw();
+                }
+                else { $("#dvmessage").empty().append(resdata.MessageHtml); }
+            });
+        }
+
+        function RefreshMaster() { tablelist.draw(); }
+        function DeleteEntry(editid) {
+            swal({
+                title: "Are you sure?",
+                text: "Your will not be able to recover this record!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: true
+            },
+                function () {
+                    $.getJSON("../SubDeviceMaster/DeleteEntry/" + editid, function (json) {
+                        if (json.EntryStatus == true) {
+                            tablelist.draw();
+                        } else {
+                            swal("Error", json.Messages, "error")
+                        }
+                    });
+
+                });
+        }
+        function StatusUpdate(updateid) {
+            swal({
+                title: "Status",
+                text: "Are you sure to change Status...?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Change Status",
+                closeOnConfirm: true
+            },
+            function () {
+                $.getJSON("../SubDeviceMaster/UpdateStatus/" + updateid, function (json) {
+                    if (json.EntryStatus == true) {
+                        tablelist.draw();
+                    } else {
+                        swal("Error", json.MessageHtml, "error")
+                    }
+                });
+            });
+        }
+        function EditEntry(editid) {
+            $('#myModalLabel').html('Modify  Detail');
+            $("#SubDeviceId").val(editid);
+            $("#EntryMode").val('Edit');
+            $("#dvmessage").empty();
+            $.getJSON("../SubDeviceMaster/EditRecord/" + editid, function (json) {
+                $("#PlantID").val(json.Model.PlantID);
+                BindDevice(json.Model.PlantID, function () {
+                    $("#DeviceId").val(json.Model.DeviceId);
+                });
+                $("#SubDeviceType").val(json.Model.SubDeviceType);
+                $("#SubDeviceName").val(json.Model.SubDeviceName);
+                $("#SerialNo").val(json.Model.SerialNo);
+                $("#Location").val(json.Model.Location);
+                $("#Make").val(json.Model.Make);
+                $('#datepicker').datepicker();
+                $('#datepicker').datepicker('setDate', json.Model.InstallDate);
+                $("#Address").val(json.Model.Address);
+                $("#IpAddress").val(json.Model.IpAddress);
+                $("#FTPFolder").val(json.Model.FTPFolder);
+                $("#FTPFilename").val(json.Model.FTPFilename);
+                $("#FTPFileDateFormat").val(json.Model.FTPFileDateFormat);
+                $("#MultiplyConversation").val(json.Model.MultiplyConversation);
+                $("#PerFormsOfPlantUniteVolume").val(json.Model.PerformsOfPlantUniteVolume);
+            });
+            $('.bs-example-modal-lg').modal('show');
+        }
+    </script>
+}
+

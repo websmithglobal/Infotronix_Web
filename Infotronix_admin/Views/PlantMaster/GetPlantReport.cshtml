@@ -1,0 +1,135 @@
+﻿@model Josheph.Framework.Entity.PlantMasterSUB
+@using ENT = Josheph.Framework.Entity;
+@using BAL = Josheph.Framework.BusinessLayer;
+@using System.Globalization;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Plant Daily Report Infotronix</title>
+    <style type="text/css">
+        body{
+            font-family: arial, sans-serif;
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    @{ 
+        ENT.DashboardCards m_SingleDay = new ENT.DashboardCards();
+        BAL.DeviceDataBAL objDashboard = new Josheph.Framework.BusinessLayer.DeviceDataBAL();
+        List<ENT.DashboardCards> lstResult = new List<ENT.DashboardCards>();
+        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || Model.AspNetUserID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+        {
+            lstResult = objDashboard.GetDashboardCards(true, true, Model.AspNetUserID);
+            m_SingleDay.EAC = lstResult.Sum(x => x.EAC);
+        }
+        else if (Model.AspNetUserID.ToString().ToUpper() == "654F9AC4-601D-4530-BB54-E667D037B1F3")
+        {
+            lstResult = objDashboard.GetDashboardCardsExcluded(true, false, Model.AspNetUserID, "('1900763842','1900764245')");
+
+            // geting top record
+            List<ENT.DashboardCards> lstResultTop = new List<ENT.DashboardCards>();
+            lstResultTop = objDashboard.GetDashboardCardsTop(true, true, Model.AspNetUserID, "('1900763842','1900764245')");
+
+            lstResult = lstResult.Concat(lstResultTop).ToList<ENT.DashboardCards>();
+
+            m_SingleDay.EAC = lstResult.Sum(x => x.EAC);
+        }
+        else
+        {
+            lstResult = objDashboard.GetDashboardCards(true, false, Model.AspNetUserID);
+            m_SingleDay.EAC = lstResult.Sum(x => x.EAC);
+        }
+
+        m_SingleDay.EACString = m_SingleDay.EAC.ToString() + " kWh";
+
+        DateTime dttm = DateTime.ParseExact(DateTime.Now.GetFormatedDate(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        List<ENT.InverterDateTable> lstTemp = new List<ENT.InverterDateTable>();
+        List<ENT.InverterDateTable> lstTable = new List<ENT.InverterDateTable>();
+        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51")
+        {
+            lstTemp = objDashboard.Get7DaysTable(dttm, dttm, true, Model.AspNetUserID);
+            foreach (ENT.InverterDateTable el in lstTemp)
+            {
+                ENT.InverterDateTable obj = new ENT.InverterDateTable();
+                obj.SerialNo = el.SerialNo;
+                obj.Day1 = el.Day1;
+                obj.Day2 = el.Day2;
+                obj.Day3 = el.Day3;
+                obj.Day4 = el.Day4;
+                obj.Day5 = el.Day5;
+                obj.Day6 = el.Day6;
+                obj.Day7 = el.Day7;
+                obj.Total7Days = el.Total7Days;
+                obj.DeviceName = el.DeviceName;
+                lstTable.Add(obj);
+            }
+        }
+        else if(Model.AspNetUserID.ToString().ToUpper() == "654F9AC4-601D-4530-BB54-E667D037B1F3")
+        {
+            lstTemp = objDashboard.Get7DaysTableExcluded(dttm, dttm, false, Model.AspNetUserID, "('1900763842','1900764245')");
+
+            List<ENT.InverterDateTable> lstTempTop = new List<ENT.InverterDateTable>();
+            lstTempTop = objDashboard.Get7DaysTableTop(dttm, dttm, true, Model.AspNetUserID, "('1900763842','1900764245')");
+
+            lstTemp = lstTemp.Concat(lstTempTop).ToList<ENT.InverterDateTable>();
+
+            lstTable = lstTemp;
+        }
+        else
+        {
+            lstTemp = objDashboard.Get7DaysTable(dttm, dttm, false, Model.AspNetUserID);
+            lstTable = lstTemp;
+        }
+
+
+    }
+    <h3>@Model.PlantName</h3>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Energy Produced - Today</th>
+        </tr>
+        <tr>
+            <td>@DateTime.Now.GetFormatedDate()</td>
+            <td>@m_SingleDay.EACString</td>
+        </tr>
+    </table>
+    <hr />
+    <h3>Inverter Wise Energy Produced, @DateTime.Now.GetFormatedDate() </h3>
+    <table>
+        <tr>
+            <th>Device Name</th>
+            <th>Energy</th>
+        </tr>
+        @foreach (ENT.InverterDateTable el in lstTable)
+        {
+            <tr>
+                <td>@el.DeviceName</td>
+                <td>@el.Day1</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

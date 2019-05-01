@@ -1,0 +1,572 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutAdminMaster.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" href="~/Content/assets/plugins/morris/morris.css">
+    <script src="~/Scripts/RGraph/RGraph.common.dynamic.js"></script>
+    <script src="~/Scripts/RGraph/RGraph.common.core.js"></script>
+    <script src="~/Scripts/RGraph/RGraph.common.effects.js"></script>
+    <script src="~/Scripts/RGraph/RGraph.common.key.js"></script>
+    <script src="~/Scripts/RGraph/RGraph.common.tooltips.js"></script>
+    <script src="~/Scripts/RGraph/RGraph.line.js"></script>
+}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-box">
+            @*@if (User.IsInRole("Administrator") || User.IsInRole("Admin"))
+                {
+                    <div class="btn-group pull-right mb-0">
+                        <a id="lblplantname" class="btn btn-info waves-effect waves-light">&nbsp;Selected Plant&nbsp;</a>
+                    </div>
+                }*@
+            <h4 class="page-title"><i class="md md-dashboard"></i>Welcome! @ViewBag.PlantName</h4>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+</div>
+@if (User.IsInRole("Administrator"))
+{
+    <div class="row">
+        <div class="col-xl-7">
+            <form role="form">
+                <div class="form-group contact-search m-b-30">
+                    <label class="control-label">Plant Name</label>
+                    <select id="PlantId" name="PlantId" class="select2" style="width:350px;">
+                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select Plant-</option>
+                        @foreach (Josheph.Framework.Entity.PlantMasterSUB el in ViewBag.PlantMaster)
+                        {
+                            <option value="@el.AspNetUserID">@el.PlantName</option>
+                        }
+                    </select>
+                    <button class="btn btn-default btn-md waves-effect waves-light" type="button" onclick="LoadDashboard();"><i class="md md-dashboard"></i>&nbsp;Show</button>
+                </div> <!-- form-group -->
+            </form>
+        </div>
+    </div>
+}
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="col-xl-7">
+            <form role="form">
+                <div class="form-group contact-search m-b-30">
+                    <label class="control-label">Plant Name</label>
+                    <select id="PlantId" name="PlantId" class="select2" style="width:350px;">
+                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select Plant-</option>
+                        @foreach (Josheph.Framework.Entity.UserAndPlantMappingSUB el in new Josheph.Framework.BusinessLayer.UserAndPlantMappingBAL().GetListByAspNetUserID(User.GetLogged_Userid()))
+                        {
+                            <option value="@el.AspNetUserID">@el.DisplayName</option>
+                        }
+                    </select>
+                    <button class="btn btn-default btn-md waves-effect waves-light" type="button" onclick="LoadDashboard();"><i class="md md-dashboard"></i>&nbsp;Show</button>
+                </div> <!-- form-group -->
+            </form>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-6 col-lg-6 col-xl-6">
+        <div class="widget-bg-color-icon card-box">
+            <div class="bg-icon bg-info pull-right">
+                <i class="md md-flash-on text-white"></i>
+            </div>
+            <div class="text-left">
+                <h3 class="text-dark"><span id="cardtoday" class="counter">0</span></h3>
+                <p class="text-muted mb-0">Energy Produced - Today</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6 col-xl-3">
+        <div class="widget-bg-color-icon card-box">
+            <div id="dvstatusiconbg" class="bg-icon bg-danger pull-right">
+                <i class="md md-settings-input-component text-white"></i>
+            </div>
+            <div class="text-left">
+                <h3 class="text-dark"><span id="dvStatus" class="counter">Offline</span></h3>
+                <p class="text-muted mb-0" id="lblLastDateTime">Plant Status</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-6">
+        <div class="portlet" style="max-height:391px;overflow:scroll;">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark">Inverter Wise Energy Produced Date</h3>
+                <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <input placeholder="dd/mm/yyyy" style="width:90px;border-radius: 4px;color: #565656;height: 38px;box-shadow: none;    padding: 2px 5px;border: 1px solid #E3E3E3;" id="datepicker" name="plantDate" type="text" readonly>
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary" onclick="InverterGraph();"><i class="ion-refresh"></i></a>
+                    <a href="javascript:;" class="btn btn-facebook" onclick="ConvertCSV();" style="font-size:15px"><i class="ion-document"></i></a>
+                    <input type="checkbox" id="invchkbox" name="invchkbox" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div id="bg-default1" class="panel-collapse collapse show">
+                <div class="portlet-body">
+                    <div id="morris-bar-example" style="height: 300px;"></div>
+                    @*<canvas id="column-chart" style="max-height:300px;"></canvas>*@
+                    <div class="table-responsive">
+                        <div class="col-lg-12">
+                            <div class="col-lg-8" style="margin-bottom:-40px;">
+                                <h5 class="portlet-title text-dark text-uppercase">
+                                    Inverter Wise Todays (kWh)
+                                </h5>
+                            </div>
+                            <div class="col-lg-3" style="float:right;">
+                                <div class="portlet-widgets">
+
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tblInverter" class="table table-hover mails m-0 table table-actions-bar">
+                            <thead>
+                                <tr>
+                                    <th align="Left">Inverter Sr. No.</th>
+                                    <th align="right" style="text-align:right;">-</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Portlet -->
+
+    </div>
+    <!-- col -->
+    <div class="col-lg-12 col-xl-6">
+        <div class="portlet">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark">Energy Produced Plant - Last 30 Days (kWh)</h3>
+                <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <input placeholder="dd/mm/yyyy" style="width:90px;border-radius: 4px;color: #565656;height: 38px;box-shadow: none;    padding: 2px 5px;border: 1px solid #E3E3E3;" id="dtchartarea" name="dtchartarea" type="text">
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary" onclick="InverterGraphArea();"><i class="ion-refresh"></i></a>
+                    <a href="javascript:;" class="btn btn-facebook" onclick="Convert30daysCSV();" style="font-size:15px"><i class="ion-document"></i></a>
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="bg-default" class="panel-collapse collapse show">
+                <div class="portlet-body">
+                    <div id="dvchartarea" style="height: 300px;"></div>
+                    @*<canvas id="line-chart" height="300"></canvas>*@
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-lg-12 col-xl-12">
+        <!-- /Portlet -->
+        <div class="portlet">
+            <!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark">Energy </h3>
+                <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <select id="DeviceIDSearch" class="select2" style="width:200px" name="DeviceIDSearch">
+                        @*onchange="FillData()"*@
+                        <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                    </select>
+                    <input placeholder="dd/mm/yyyy" style="width:90px;border-radius: 4px;color: #565656;height: 38px;box-shadow: none;    padding: 2px 5px;border: 1px solid #E3E3E3;" id="datepickerForDevice" name="DeviceDate" type="text">
+                    <input id="checkbox6a1" name="checkbox6a1" type="checkbox" data-parsley-multiple="checkbox6a"><label for="checkbox6a" style="display:none;">0</label>
+                    <a href="javascript:;" data-toggle="reload" class="btn btn-primary" onclick="InverterGrapLine();"><i class="ion-refresh"></i></a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div id="bg-default" class="panel-collapse collapse show" style="height:420px">
+                <input type="hidden" id="canIds" value="0" />
+                <div class="portlet-body" id="divCan" style="height:420px;">
+                    @*<div id="dvchartarea1" style="height: 300px;"></div>*@
+                    <canvas id="dvchartarea1Can" width="1050" height="350"></canvas>
+                </div>
+            </div>
+
+
+            <div id="divDisplayText">
+
+            </div>
+            <div id="divDisplayText2">
+
+            </div>
+
+        </div>
+    </div>
+    <!-- /Portlet -->
+</div>
+<input type="hidden" id="hdLoginID" name="hdLoginID" value="@User.GetLogged_Userid()" />
+
+@section scripts{
+    <script type="text/javascript" src="~/Content/assets/plugins/morris/morris.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/plugins/raphael/raphael-min.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/Chart/chart.min.js"></script>*@
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#datepicker').datepicker();
+            $('#datepicker').datepicker('setDate', 'today');
+            $("#datepicker").datepicker({ minDate: 0 });
+
+            $('#datepickerForDevice').datepicker();
+            $('#datepickerForDevice').datepicker('setDate', 'today');
+            $('#reportrange').daterangepicker({
+                endDate: moment()
+            });
+
+            $('#dtchartarea').datepicker();
+            $('#dtchartarea').datepicker('setDate', 'today');
+            $("#dtchartarea").datepicker({ minDate: 0 });
+
+            preloaderhide();
+            window.setTimeout(GetCardsValue(), 300000);
+        });
+
+        function LoadDashboard() {
+            $("#hdLoginID").val($("#PlantId").val());
+            GetCardsValue();
+        }
+
+        function onclickplantbutton(plantid, plantname) {
+            $("#hdLoginID").val(plantid);
+            $("#lblplantname").empty().html(plantname);
+            GetCardsValue();
+        }
+
+
+        $('#FromDate').datepicker({
+            format: "mm/dd/yyyy",
+            todayBtn: "linked",
+            language: "de",
+            daysOfWeekDisabled: "0,6",
+            daysOfWeekHighlighted: "4",
+            todayHighlight: true,
+        }).on('changeDate', setFromDate);
+
+        $('#ToDate').datepicker({
+            format: "mm/dd/yyyy",
+            todayBtn: "linked",
+            language: "de",
+            daysOfWeekDisabled: "0,6",
+            daysOfWeekHighlighted: "4",
+            todayHighlight: true,
+        }).on('changeDate', setToDate);
+
+        function setFromDate() {
+            var value = $('#FromDate').datepicker('getFormattedDate');
+            $("#txtfromdate").val(value);
+        }
+        function setToDate() {
+            var value = $('#ToDate').datepicker('getFormattedDate');
+            $("#txttodate").val(value);
+        }
+
+        function testAnim(x) {
+            $('#crdtoday').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+            });
+            $('#crdtotal').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+            });
+        };
+
+        function GetCardsValue() {
+            preloader("Loading Data Please Wait..");
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&plantDate=" + $("#datepicker").val();
+
+            $("#tblInverter > thead").empty();
+            $("#tblInverter > tbody").empty();
+            $("#tblInverter > tfoot").empty();
+
+            $("#cardtoday").html("0");
+            $("#cardtotal").html("");
+            $("#lblLastDateTime").html("");
+
+            $.post("/Home/GetDashboardCards", postform, function (json) {
+                $("#cardtoday").html(json.Today.EACString);
+                $("#cardtotal").html(json.Entire.EACString);
+                $("#lblLastDateTime").html(json.LastDateTime);
+                $("#dvstatusiconbg").removeClass("bg-danger");
+                $("#dvstatusiconbg").removeClass("bg-primary");
+                $("#dvStatusClass").removeClass("text-primary");
+                $("#dvStatusClass").removeClass("text-danger");
+                if (json.ActiveMinutes >= 30) {
+                    $("#dvStatusClass").addClass("text-danger");
+                    $("#dvstatusiconbg").addClass("bg-danger");
+                    $("#dvStatus").empty().html("Offline");
+                } else {
+                    $("#dvStatusClass").addClass("text-primary");
+                    $("#dvstatusiconbg").addClass("bg-primary");
+                    $("#dvStatus").empty().html("Online");
+                }
+                preloaderhide();
+                // GetInverterTable();
+            });
+            InverterGraph();
+            InverterGraphArea();
+        }
+
+        function getDate(days) {
+            var someDate = new Date();
+            var dd = someDate.getDate() + days;
+            var mm = someDate.getMonth() + 1;
+            var y = someDate.getFullYear();
+            var someFormattedDate = dd + '/' + mm + '/' + y;
+            return someFormattedDate;
+        }
+
+        function GetInverterTable() {
+          
+            // preloader("Loading Data Please Wait..");
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&plantDate=" + $("#datepicker").val() + "&isRequiredDevide=" + $("#invchkbox").is(":checked");
+            $.post("/Home/GetDashboardCardsInverterTable", postform, function (json) {
+
+                var json = json.lstTable;
+                var Day1 = 0, Day2 = 0, Day3 = 0, Day4 = 0, Day5 = 0, Day6 = 0, Day7 = 0, GrandTotal = 0
+                $("#tblInverter > thead").empty();
+                $("#tblInverter > tbody").empty();
+                $("#tblInverter > tfoot").empty();
+
+                var tr = $('<tr/>');
+                tr.append("<th><b>Device Name</b></th>");
+                tr.append("<th ><b>" + $("#datepicker").val() + "</b></th>");
+                tr.append("<th ><b>Status</b></th>");
+                $("#tblInverter > thead").append(tr);
+
+
+                var elment = $("#DeviceIDSearch");
+                elment.empty();
+                elment.append('<option value="00000000-0000-0000-0000-000000000000">-Select-</option>');
+                
+                elment.append('<option value="DIV000000">--All--</option>');
+
+                for (var i = 0; i < json.length; i++) {
+                    var tr = $('<tr/>');
+                    tr.append("<td>" + json[i].DeviceName + "</td>");
+                    tr.append("<td>" + json[i].Day1 + "</td>");
+                    tr.append("<td>" + json[i].InvStatusText + "</td>");
+                    Day1 = Day1 + json[i].Day1;
+                    $("#tblInverter > tbody").append(tr);
+
+                    elment.append('<option value="' + json[i].SerialNo + '">' + json[i].DeviceName + '</option>');
+                }
+                var tr = $('<tr/>');
+                tr.append("<td><b>Total:</b></td>");
+                tr.append("<td ><b>" + Day1.toFixed(2) + "</b></td>");
+                tr.append("<td></td>");
+                $("#tblInverter > tfoot").append(tr);
+
+                preloaderhide();
+            });
+        }
+
+        function InverterGraph() {
+            preloader("Loading Data Please Wait..");
+            $("#morris-bar-example").empty();
+            
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&plantDate=" + $("#datepicker").val() + "&isRequiredDevide=" + $("#invchkbox").is(":checked");
+            $.post("/Home/GetBarChartValue", postform, function (json) {
+
+                Morris.Bar({
+                    element: 'morris-bar-example',
+                    data: json,
+                    xkey: 'label',
+                    ykeys: ['value'],
+                    labels: ['Energy Produced'],
+                    hideHover: 'auto',
+                    resize: true,
+                    xLabelAngle: 80
+                });
+                preloaderhide();
+            });
+            GetInverterTable(0);
+        }
+
+        function InverterGraphArea() {
+            preloader("Loading Data Please Wait..");
+            $("#dvchartarea").empty();
+
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&fromDate=" + $("#dtchartarea").val();
+            $.post("/Home/GetBarAreaChartValue", postform, function (json) {
+               
+                new Morris.Bar({
+                    element: 'dvchartarea',
+                    data: json,
+                    xkey: 'label',
+                    ykeys: ['value'],
+                    labels: ['Energy Produced'],
+                    hideHover: 'auto',
+                    resize: true,
+                    gridLineColor: '#eef0f2',
+                    barColors: ['#3ac9d6'],
+                    xLabelAngle: 70
+                });
+                preloaderhide();
+            });
+        }
+
+        function addZero(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+
+        function ConvertCSV() {
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&plantDate=" + $("#datepicker").val();
+            $.post("/Home/ConvertCSV", postform, function (json) {
+                window.location.href = window.location.href + "/Uploads/Report/INVERTERDATA.xls";
+            });
+        }
+
+        function Convert30daysCSV() {
+            var postform = "hdLoginID=" + $("#hdLoginID").val() + "&plantDate=" + $("#dtchartarea").val();
+            $.post("/Home/Convert30daysCSV", postform, function (json) {
+                window.location.href = window.location.href + "/Uploads/Report/plantdata30days.xls";
+            });
+        }
+
+        function InverterGrapLine() {
+            //InverterGrapLineService();
+            $("#dvchartarea1Can").empty();
+            var chkval = $('input[name=checkbox6a1]').is(':checked') ? "1" : "0";
+            preloader("Loading Data Please Wait..");
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))Home/GetLineChartForGenrateEnregy",
+                data: "{hdLoginID: '" + $("#hdLoginID").val() + "',DeviceIDSearch : '" + $("#DeviceIDSearch").val() + "', plantDate : '" + $("#datepickerForDevice").val() + "', checkbox6a : '" + chkval + "' }",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    var canv = document.getElementById('divCan');
+                    if (r.length > 0) {
+                        var canIds = $("#canIds").val();
+                        var CID = (parseInt(canIds) + 1).toString()
+                        $("#canIds").val(CID); $("#divCan").empty();
+                        $("#canIds").show();
+                        $("#divCan").append("<canvas id='dvchartarea1Can" + canIds + "' width='1050' height='350'></canvas>");
+
+                        var labels = [], series1 = [], series2 = [], series3 = [];
+                        var NewL = [, ], series3New = [, ];
+                        var lblCount = 0, ArrCount = 0, ToolTipCount = 0;
+
+                        if ($("#DeviceIDSearch").val() == "DIV000000") {
+
+                            var d = new Date(2017, 01, 01, 06, 00, 00);
+                            for (var i = 0; i < 168; i++) {
+                                var tm1 = addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + ":" + addZero(d.getSeconds());
+                                series1.push(tm1);
+                                d.setMinutes(d.getMinutes() + 5);
+                                if (i % 6 == 0) series2.push(tm1);
+                                else series2.push(" ");
+                            }
+
+                            for (x in r) {
+                                var nval = r[x].value.split(",");
+                                NewL[ArrCount] = [];
+                                
+                                for (i in nval) {
+                                    NewL[ArrCount][i] = parseFloat(nval[i].split("|")[1]);
+                                    series3[ToolTipCount] = "(" + r[x].label + ")" + nval[i];
+                                    ToolTipCount++;
+                                }
+                                ArrCount++;
+                            }
+                            console.log(series3);
+                            
+                            var bar = new RGraph.Line({
+                                id: "dvchartarea1Can" + canIds.toString(),
+                                data: NewL,
+                                options: {
+                                    textAccessible: true, tooltips: series3, labels: series2, tickmarks: 'filledcircle', shadow: false, scaleZerostart: true
+                                    , tickmarks: 'endcircle', textAngle: 60, colors: ['#3AAD9E', '#A569BD', '#BA4A00', '#27AE60', '#0B5345', '#A93226', '#CB4335', '#76448A', '#7D3C98', '#2471A3', '#17A589', '#F1C40F', '#273746', '#85929E', '#154360', '#16A085', '#82E0AA', '#DC7633', '#D2B4DE', '#DC7633', '#1B4F72', '#F0B27A', '#ABB2B9', '#F5CBA7', '#D2B4DE'], textColor: '#696969', labelsAboveBold: true
+                                }
+                            }).on('beforedraw', function (obj) {
+                                RGraph.clear(obj.canvas, 'white');
+                            }).trace2({ frames: 15 });
+                        }
+                        else {
+
+                            for (x in r) {
+                                labels.push(parseFloat(r[x].value));
+                                series1.push(r[x].value + " | " + r[x].label);
+                                if (x % 6 == 0) series2.push(r[x].label);
+                                else series2.push(" ");
+
+                                console.log(r[x].value + " | " + r[x].label);
+
+                            }
+
+                            var bar = new RGraph.Line({
+                                id: "dvchartarea1Can" + canIds.toString(),
+                                data: labels,
+                                options: {
+                                    textAccessible: true, tooltips: series1, labels: series2, tickmarks: 'filledcircle', linewidth: 2
+                                    , tickmarks: 'endcircle', textAngle: 60, colors: ['#3AAD9E'], textColor: '#696969', labelsAboveBold: true
+                                }
+                            }).on('beforedraw', function (obj) {
+                                RGraph.clear(obj.canvas, 'white');
+                            }).trace2({ frames: 15 });
+                        }
+                    }
+                    else { $("#canIds").hide(); }
+                    preloaderhide();
+                },
+                failure: function (response) { alert('There was an error.'); }
+            });
+        }
+
+        function InverterGrapLineService() {
+            $("#dvchartarea1").empty();
+            //var postform = "hdLoginID=" + $("#hdLoginID").val() + "&DeviceIDSearch=" + $("#DeviceIDSearch").val() + "&plantDate=" + $("#datepicker").val() + "&checkbox6a=" + $("#checkbox6a").val();
+            //var postform = "hdLoginID=" + $("#hdLoginID").val() + "&DeviceIDSearch=" + $("#DeviceIDSearch").val() + "&plantDate=" + $("#datepicker").val() + "&checkbox6a=" + $("#checkbox6a").val();
+            var chkval = $('input[name=checkbox6a1]').is(':checked') ? "1" : "0";
+            preloader("Loading Data Please Wait..");
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))Home/GetLineChartForGenrateEnregyService",
+                data: "{plantDate : '" + $("#datepickerForDevice").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    var canv = document.getElementById('divCan');
+                    if (r.length > 0) {
+                    }
+                    else { $("#canIds").hide(); }
+                    preloaderhide();
+                },
+                failure: function (response) { alert('There was an error.'); }
+            });
+        }
+
+
+
+        function OpenDateDialog(charttype) {
+            $('#myModal').modal('show')
+        }
+
+
+    </script>
+}
+
+

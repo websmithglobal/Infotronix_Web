@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdminMaster.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-box">
+            @*<ol class="breadcrumb pull-right mb-0">
+                    <li class="breadcrumb-item"><a href="#">Ubold</a></li>
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Dashboard 1</li>
+                </ol>*@
+            <h4 class="page-title">Device Data</h4>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet">
+    <div class="portlet-heading bg-custom">
+        <div class="row">
+            <div class="col-sm-2">
+                <label class="control-label">Plant Name</label>
+                <select id="PlantIDSearch" name="PlantIDSearch" class="select2">
+                    <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        foreach (Josheph.Framework.Entity.PlantMasterSUB el in ViewBag.PlantMaster)
+                        {
+                        <option value="@el.PlantId">@el.PlantName</option>
+                        }
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        foreach (Josheph.Framework.Entity.UserAndPlantMappingSUB el in new Josheph.Framework.BusinessLayer.UserAndPlantMappingBAL().GetListByAspNetUserID(User.GetLogged_Userid()))
+                        {
+                            <option value="@el.PlantId">@el.DisplayName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">Main Device</label>
+                <select id="DeviceIdSearch" name="DeviceIdSearch" class="select2" style="width:250px;">
+                    <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">Sub Device</label>
+                <select id="SubDeviceIdSearch" name="SubDeviceIdSearch" class="select2" style="width:250px;">
+                    <option value="00000000-0000-0000-0000-000000000000" selected>-Select-</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">Select Date</label>
+                <br />
+                <input placeholder="dd/mm/yyyy" id="datepicker" name="datepicker" type="text" class="form-control" readonly>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label">From</label>
+                <br />
+                <div class="input-group clockpicker m-b-20" data-autoclose="true">
+                    <input type="text" id="fromtime" name="fromtime" class="form-control" value="00:00" readonly>
+                    @*<span class="input-group-addon"> <span class="md md-access-time"></span> </span>*@
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label">To</label>
+                <br />
+                <div class="input-group clockpicker m-b-20" data-autoclose="true">
+                    <input type="text" id="totime" name="totime" class="form-control" value="00:00" readonly>
+                    @*<span class="input-group-addon"> <span class="md md-access-time"></span> </span>*@
+                </div>
+            </div>
+            <div class="col-sm-1" style="text-align:left;">
+                <label class="control-label">Find</label>
+                <br />
+                <button class="btn btn-xs" type="button" onclick="RefreshMaster();"><i class="md md-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div id="bg-primary" class="panel-collapse collapse show">
+        <div class="portlet-body">
+            <table id="tblDisplay" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Device Date</th>
+                        <th>Device Date Time</th>
+                        <th>Total Energy</th>
+                        <th>Total Real Power</th>
+                        <th>Eac</th>
+                        <th>Pac</th>
+                        <th>Status</th>
+                        <th>Error </th>
+                        <th>Temp</th>
+                        <th>Cos</th>
+                        <th>Fac</th>
+                        <th>Qac</th>
+                        <th>UPV1</th>
+                        <th>UPV2</th>
+                        <th>UPV3</th>
+                        <th>UPV4</th>
+                        <th>UPV5</th>
+                        <th>UPV6</th>
+                        <th>UPV7</th>
+                        <th>UPV8</th>
+                        <th>UPV9</th>
+                        <th>UPV10</th>
+                        <th>UPV11</th>
+                        <th>UPV12</th>
+                        <th>IPV1</th>
+                        <th>IPV2</th>
+                        <th>IPV3</th>
+                        <th>IPV4</th>
+                        <th>IPV5</th>
+                        <th>IPV6</th>
+                        <th>IPV7</th>
+                        <th>IPV8</th>
+                        <th>IPV9</th>
+                        <th>IPV10</th>
+                        <th>IPV11</th>
+                        <th>IPV12</th>
+                        <th>UAC1</th>
+                        <th>UAC2</th>
+                        <th>UAC3</th>
+                        <th>IAC1</th>
+                        <th>IAC2</th>
+                        <th>IAC3</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var tablelist;
+        $(document).ready(function () {
+            $('.clockpicker').clockpicker({
+                donetext: 'Done'
+            });
+            $('#datepicker').datepicker();
+            $('#datepicker').datepicker('setDate', 'today');
+
+            $('.input-daterange-timepicker').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'MM/DD/YYYY h:mm A'
+                },
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-default',
+                cancelClass: 'btn-white'
+            });
+
+            $("#PlantIDSearch").on("change", function (e) {
+                var contid = $("#PlantIDSearch").val();
+                BindDevice(contid);
+            });
+
+            $("#DeviceIdSearch").on("change", function (e) {
+                var contid1 = $("#DeviceIdSearch").val();
+                BindSubDevice(contid1);
+            });
+
+            tablelist = $('#tblDisplay').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "searching":false,
+                "sPaginationType": "full_numbers",
+                "info": true,
+                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                "ajax": {
+                    "url": "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))DeviceData/GetMainDeviceList",
+                    "type": "POST", "datatype": "json",
+                    "data": function (d) { d.SubDeviceID = $("#SubDeviceIdSearch").val(), d.DeviceDate = $("#datepicker").val(), d.fromtime = $("#fromtime").val(), d.totime = $("#totime").val(); }
+                },
+                "aoColumns": [
+                    { data: "DeviceDate", "bSearchable": false, "orderable": false },
+                    { data: "DeviceDateTimeText", "bSearchable": false, "orderable": false },
+                    { data: "TotalEnergy", "bSearchable": false, "orderable": false },
+                    { data: "TotalRealPower", "bSearchable": false, "orderable": false },
+                    { data: "Eac", "bSearchable": false, "orderable": false },
+                    { data: "Pac", "bSearchable": false, "orderable": false },
+                    { data: "InvStatusText", "bSearchable": false, "orderable": false },
+                    { data: "Error", "bSearchable": false, "orderable": false },
+                    { data: "Temp", "bSearchable": false, "orderable": false },
+                    { data: "Cos", "bSearchable": false, "orderable": false },
+                    { data: "Fac", "bSearchable": false, "orderable": false },
+                    { data: "Qac", "bSearchable": false, "orderable": false },
+                    { data: "UPV1", "bSearchable": false, "orderable": false },
+                    { data: "UPV2", "bSearchable": false, "orderable": false },
+                    { data: "UPV3", "bSearchable": false, "orderable": false },
+                    { data: "UPV4", "bSearchable": false, "orderable": false },
+                    { data: "UPV5", "bSearchable": false, "orderable": false },
+                    { data: "UPV6", "bSearchable": false, "orderable": false },
+                    { data: "UPV7", "bSearchable": false, "orderable": false },
+                    { data: "UPV8", "bSearchable": false, "orderable": false },
+                    { data: "UPV9", "bSearchable": false, "orderable": false },
+                    { data: "UPV10", "bSearchable": false, "orderable": false },
+                    { data: "UPV11", "bSearchable": false, "orderable": false },
+                    { data: "UPV12", "bSearchable": false, "orderable": false },
+                    { data: "IPV1", "bSearchable": false, "orderable": false },
+                    { data: "IPV2", "bSearchable": false, "orderable": false },
+                    { data: "IPV3", "bSearchable": false, "orderable": false },
+                    { data: "IPV4", "bSearchable": false, "orderable": false },
+                    { data: "IPV5", "bSearchable": false, "orderable": false },
+                    { data: "IPV6", "bSearchable": false, "orderable": false },
+                    { data: "IPV7", "bSearchable": false, "orderable": false },
+                    { data: "IPV8", "bSearchable": false, "orderable": false },
+                    { data: "IPV9", "bSearchable": false, "orderable": false },
+                    { data: "IPV10", "bSearchable": false, "orderable": false },
+                    { data: "IPV11", "bSearchable": false, "orderable": false },
+                    { data: "IPV12", "bSearchable": false, "orderable": false },
+                    { data: "UAC1", "bSearchable": false, "orderable": false },
+                    { data: "UAC2", "bSearchable": false, "orderable": false },
+                    { data: "UAC3", "bSearchable": false, "orderable": false },
+                    { data: "IAC1", "bSearchable": false, "orderable": false },
+                    { data: "IAC2", "bSearchable": false, "orderable": false },
+                    { data: "IAC3", "bSearchable": false, "orderable": false },
+                ],
+            });
+            tablelist.init();
+        });
+
+        function BindDevice(palid) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))MainDeviceMaster/GetDeviceByPlant",
+                data: { PlantID: palid },
+                success: function (data) {
+                    var elment = $("#DeviceIdSearch");
+                    elment.empty();
+                    elment.append('<option value="00000000-0000-0000-0000-000000000000">-Select-</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        elment.append('<option value="' + data[i].DeviceId + '">' + data[i].DeviceName + '</option>');
+                    }
+                }
+            });
+        }
+
+
+        function BindSubDevice(cntid) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))SubDeviceMaster/GetSubDeviceByDeviceID",
+                data: { DeviceId: cntid },
+                success: function (data) {
+                    var elment = $("#SubDeviceIdSearch");
+                    elment.empty();
+                    elment.append('<option value="00000000-0000-0000-0000-000000000000">-Select-</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        elment.append('<option value="' + data[i].SubDeviceId + '">' + data[i].SubDeviceName + '</option>');
+                    }
+                }
+            });
+        }
+
+        function RefreshMaster() { tablelist.draw(); }
+
+        function FillData() { tablelist.draw(); }
+    </script>
+}
+
