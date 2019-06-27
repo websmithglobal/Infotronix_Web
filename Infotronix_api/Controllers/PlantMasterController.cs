@@ -57,7 +57,7 @@ namespace Infotronix_api.Controllers
             string lastDateTime = ""; int activeMinutes = 0;
             try
             {
-                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                 {
                     lstResult = objDashboard.GetDashboardCards(true, true, hdLoginID);
                     m_SingleDay.EAC = lstResult.Sum(x => x.EAC);
@@ -114,7 +114,7 @@ namespace Infotronix_api.Controllers
             {
                 DateTime dttm = DateTime.ParseExact(plantDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 //if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E")
-                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                 {
                     lstResult = objDashboard.GetChartData(dttm, dttm, true, hdLoginID);
                 }
@@ -136,7 +136,7 @@ namespace Infotronix_api.Controllers
                 {
                     ENT.BarChartClass obj = new ENT.BarChartClass();
                     obj.label = el.SerialNo;
-                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51")
+                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                     {
                         obj.value = el.EAC;
                     }
@@ -170,7 +170,7 @@ namespace Infotronix_api.Controllers
             {
                 DateTime dttm = DateTime.ParseExact(fromDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 //if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E")
-                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                 {
                     lstResult = objDashboard.GetChartAreaData(DateTime.Now.AddDays(-30), dttm, true, hdLoginID);
                 }
@@ -201,7 +201,7 @@ namespace Infotronix_api.Controllers
                 {
                     ENT.BarAreaChartClass obj = new ENT.BarAreaChartClass();
                     obj.label = el.SerialNo;
-                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                     {
                         obj.value = el.EAC;
                     }
@@ -248,7 +248,7 @@ namespace Infotronix_api.Controllers
             List<ENT.InverterDateTable> lstTable = new List<ENT.InverterDateTable>();
 
             // if (hdLoginID.ToString().ToUpper().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E")
-            if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+            if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
             {
                 lstTemp = objDashboard.Get7DaysTableAPI(dttm, dttm, true, hdLoginID);
             }
@@ -312,7 +312,7 @@ namespace Infotronix_api.Controllers
             BAL.DeviceDataBAL objDashboard = new BAL.DeviceDataBAL();
             DateTime dttm = DateTime.ParseExact(plantDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             // if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E")
-            if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+            if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
             {
                 lstResult = objDashboard.GetDailyEnergyAPI(hdLoginID, dttm, dttm, true, DeviceIDSearch, checkbox6a);
             }
@@ -332,7 +332,7 @@ namespace Infotronix_api.Controllers
                 {
                     ENT.LineChartClass obj = new ENT.LineChartClass();
                     obj.label = el.SerialNo;
-                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                     {
                         obj.value = el.EAC;
                     }
@@ -346,7 +346,7 @@ namespace Infotronix_api.Controllers
                 {
                     ENT.LineChartClass obj = new ENT.LineChartClass();
                     obj.label = el.SerialNo;
-                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+                    if (hdLoginID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || hdLoginID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || hdLoginID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || hdLoginID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || hdLoginID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
                     {
                         if (Convert.ToDecimal(el.EAC) >= 0)
                         {

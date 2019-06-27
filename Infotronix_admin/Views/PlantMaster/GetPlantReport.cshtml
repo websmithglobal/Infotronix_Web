@@ -39,7 +39,7 @@
         ENT.DashboardCards m_SingleDay = new ENT.DashboardCards();
         BAL.DeviceDataBAL objDashboard = new Josheph.Framework.BusinessLayer.DeviceDataBAL();
         List<ENT.DashboardCards> lstResult = new List<ENT.DashboardCards>();
-        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || Model.AspNetUserID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
+        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || Model.AspNetUserID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
         {
             lstResult = objDashboard.GetDashboardCards(true, true, Model.AspNetUserID);
             m_SingleDay.EAC = lstResult.Sum(x => x.EAC);
@@ -67,7 +67,7 @@
         DateTime dttm = DateTime.ParseExact(DateTime.Now.GetFormatedDate(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
         List<ENT.InverterDateTable> lstTemp = new List<ENT.InverterDateTable>();
         List<ENT.InverterDateTable> lstTable = new List<ENT.InverterDateTable>();
-        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51")
+        if (Model.AspNetUserID.ToString().ToUpper() == "CDADA587-1678-4128-B37D-BA9E2B04E508" || Model.AspNetUserID.ToString().ToUpper() == "DBF3D275-0110-4D03-A519-7A777D18020E" || Model.AspNetUserID.ToString().ToUpper() == "307F425E-2A71-45DC-A528-0E45AAF510F2" || Model.AspNetUserID.ToString().ToUpper() == "E0A6FF76-F989-4CA6-AE90-EC32AAA0D33C" || Model.AspNetUserID.ToString().ToUpper() == "EB3123B4-6D53-42C5-BF2A-AEBA11257B51" || hdLoginID.ToString().ToUpper() == "B683B70B-5C1A-4275-96DE-9DCDE9101B3E")
         {
             lstTemp = objDashboard.Get7DaysTable(dttm, dttm, true, Model.AspNetUserID);
             foreach (ENT.InverterDateTable el in lstTemp)
