@@ -90,12 +90,12 @@ namespace Josheph.Framework.DataLayer
                 if (isRequiredLastOne)
                 {
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SerialNo,
-                            (Select MAX(DD.Eac)
+                            (Select TOP 1 DD.Eac
                             FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + DateTime.Now.ToString("yyyy-MM-dd") + "') AS EAC  ";
+                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + DateTime.Now.ToString("yyyy-MM-dd") + "' ORDER BY DD.DeviceDateTime desc) AS EAC";
                 }
                 else { QueryDisctionery.SelectPart = "SELECT SubDeviceMaster.SerialNo , SUM(DeviceData.Eac) AS EAC "; }
 
@@ -224,12 +224,12 @@ namespace Josheph.Framework.DataLayer
                     //(Select TOP 1 DD.Eac
                     //(Select MAX(DD.Eac)
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SerialNo,
-                        (Select MAX(DD.Eac)      
+                        (Select TOP 1 DD.Eac 
                             FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "') AS EAC  ";
+                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' ORDER BY DD.DeviceDateTime desc) AS EAC  ";
                 }
                 else { QueryDisctionery.SelectPart = "SELECT SubDeviceMaster.SerialNo , SUM(DeviceData.Eac) AS EAC "; }
                 QueryDisctionery.ParameterPart = @"WHERE PlantMaster.AspNetUserID ='" + UserID.ToString() + "' AND DeviceData.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DeviceData.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "'";
@@ -265,12 +265,12 @@ namespace Josheph.Framework.DataLayer
                 if (isRequiredLastOne)
                 {
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SerialNo,
-                            (Select MAX(DD.Eac)
+                            (Select TOP 1 DD.Eac 
                             FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "') AS EAC  ";
+                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' ORDER BY DD.DeviceDateTime desc) AS EAC  ";
                 }
                 else { QueryDisctionery.SelectPart = "SELECT SubDeviceMaster.SerialNo , SUM(DeviceData.Eac) AS EAC "; }
                 QueryDisctionery.ParameterPart = @"WHERE PlantMaster.AspNetUserID ='" + UserID.ToString() + "' AND DeviceData.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DeviceData.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' AND SubDeviceMaster.SerialNo NOT IN "+Excluded;
@@ -311,12 +311,12 @@ namespace Josheph.Framework.DataLayer
                     //                PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
                     //        WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' ORDER By DD.Eac Desc) AS EAC  ";
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SubDeviceName,
-                            (Select MAX(DD.Eac)
+                            (Select TOP 1 DD.Eac
                             FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "') AS EAC";
+                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' ORDER By DD.Eac Desc) AS EAC";
                 }
                 else { QueryDisctionery.SelectPart = "SELECT SubDeviceMaster.SerialNo , SUM(DeviceData.Eac) AS EAC "; }
                 QueryDisctionery.ParameterPart = @"WHERE PlantMaster.AspNetUserID ='" + UserID.ToString() + "' AND DeviceData.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DeviceData.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' AND SubDeviceMaster.SerialNo IN " + Excluded;
@@ -400,12 +400,12 @@ namespace Josheph.Framework.DataLayer
                 if (isRequiredLastOne)
                 {
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SubDeviceName AS SerialNo,SubDeviceMaster.PerformsOfPlantUniteVolume,
-                                (Select MAX(DD.Eac)
+                                (Select TOP 1
                                 FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                                WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "') AS EAC ";
+                                WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate.ToString("yyyy-MM-dd") + "' AND DD.DeviceDate <= '" + todate.ToString("yyyy-MM-dd") + "' ORDER BY DD.DeviceDateTime desc) AS EAC ";
                 }
                 else
                 {
@@ -1035,12 +1035,12 @@ namespace Josheph.Framework.DataLayer
                 {
                     //(Select MAX(DD.Eac)
                     QueryDisctionery.SelectPart = @"SELECT SubDeviceMaster.SubDeviceName AS DeviceName,SubDeviceMaster.SerialNo,SubDeviceMaster.PerformsOfPlantUniteVolume,
-                            (Select MAX(DD.Eac)
+                            (Select TOP 1 DD.EAC
                             FROM      DeviceData DD RIGHT OUTER JOIN
                                     SubDeviceMaster SBD ON DD.SubDeviceId = SBD.SubDeviceId RIGHT OUTER JOIN
                                     MainDeviceMaster ON SBD.DeviceId = MainDeviceMaster.DeviceId RIGHT OUTER JOIN
                                     PlantMaster ON MainDeviceMaster.PlantId = PlantMaster.PlantId
-                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate + "' AND DD.DeviceDate <= '" + todate + "') AS Day1  ";
+                            WHERE SBD.SerialNo = SubDeviceMaster.SerialNo AND DD.DeviceDate >= '" + fromdate + "' AND DD.DeviceDate <= '" + todate + "' ORDER BY DD.DeviceDateTime desc) AS Day1  ";
                 }
                 else
                 {
