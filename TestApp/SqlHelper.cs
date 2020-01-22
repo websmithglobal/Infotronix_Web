@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -11,7 +12,8 @@ namespace Infotronix.TestApp
 {
     class SqlHelper
     {
-        public static string conStr = @"Data Source=51.255.68.69;Initial Catalog=admin_Infotronix;Uid=sa;Password=6Y7sO1YR;";
+        //public static string conStr = @"Data Source=51.255.68.69;Initial Catalog=admin_Infotronix;Uid=sa;Password=6Y7sO1YR;";
+        public static string conStr = @"Data Source=149.56.23.109;Initial Catalog=admin_Infotronix;Uid=@web!!Inforotronix1;Password=!108!@@UserBhargav1;";
 
         protected static MEMBERS.SQLReturnValue ExecuteNoneQueryWithMessage(string ProceduerName, string[,] paramvalue, bool AddOutputparameter)
         {

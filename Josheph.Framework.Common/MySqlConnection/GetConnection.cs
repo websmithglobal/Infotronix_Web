@@ -87,7 +87,7 @@ namespace Josheph.Framework.Common.MySqlConnection
                 return System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             }catch
             {
-                return "Data Source=51.255.68.69;Initial Catalog=admin_Infotronix;Uid=sa;Password=6Y7sO1YR;";
+                return "Data Source=149.56.23.109;Initial Catalog=admin_Infotronix;Uid=@web!!Inforotronix1;Password=!108!@@UserBhargav1;";
             }
         }
     }

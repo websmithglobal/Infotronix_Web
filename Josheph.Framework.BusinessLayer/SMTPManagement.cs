@@ -58,14 +58,14 @@ namespace Josheph.Framework.BusinessLayer
 
                         // send message and mail for plant
                         
-                        SendEmail();
+                        //SendEmail();
                         
-                        // added custome email for specific plant.
-                        if (el.PlantId == Guid.Parse("E91BE008-E124-406F-94CD-E910BC5F19CD"))
-                        {
-                            this.ToMailID = "accounts1@esteemauto.com";
-                            SendEmail();
-                        }
+                        //// added custome email for specific plant.
+                        //if (el.PlantId == Guid.Parse("E91BE008-E124-406F-94CD-E910BC5F19CD"))
+                        //{
+                        //    this.ToMailID = "accounts1@esteemauto.com";
+                        //    SendEmail();
+                        //}
 
                         SendMessage(el.Mobile, ept, el.PlantName);
                     }
