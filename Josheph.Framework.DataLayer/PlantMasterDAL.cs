@@ -84,8 +84,8 @@ namespace Josheph.Framework.DataLayer
                     objDBHelper.Disposed();
                 }
             }
-            catch
-            { throw; }
+            catch (Exception ex)
+            { }
             finally
             { parFields.Clear(); }
             return lstEntity;
@@ -108,8 +108,8 @@ namespace Josheph.Framework.DataLayer
                     objDBHelper.Disposed();
                 }
             }
-            catch (Exception)
-            { throw; }
+            catch (Exception ex)
+            { }
             finally
             { parFields.Clear(); }
             return lstEntity;
@@ -139,8 +139,8 @@ namespace Josheph.Framework.DataLayer
                     objDBHelper.Disposed();
                 }
             }
-            catch (Exception)
-            { throw; }
+            catch (Exception ex)
+            { }
             finally
             { parFields.Clear(); }
             return lstEntity;
@@ -161,8 +161,8 @@ namespace Josheph.Framework.DataLayer
                     objDBHelper.Disposed();
                 }
             }
-            catch (Exception)
-            { throw; }
+            catch (Exception ex)
+            { }
             finally
             { parFields.Clear(); }
             return lstEntity;

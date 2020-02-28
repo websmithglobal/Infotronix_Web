@@ -13,7 +13,7 @@ namespace Infotronix.Scheduler.Task
     {
         static void Main(string[] args)
         {
-            if(args[0] == "sendmail")
+            //if (args[0] == "sendmail")
             {
                 //Console.WriteLine("MailSending Intialized ....");
                 //using (BAL.DeviceDataBAL obj = new BAL.DeviceDataBAL())

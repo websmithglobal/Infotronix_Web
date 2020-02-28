@@ -58,7 +58,7 @@ namespace Josheph.Framework.BusinessLayer
 
                         // send message and mail for plant
                         
-                        //SendEmail();
+                        SendEmail();
                         
                         //// added custome email for specific plant.
                         //if (el.PlantId == Guid.Parse("E91BE008-E124-406F-94CD-E910BC5F19CD"))
@@ -135,8 +135,10 @@ namespace Josheph.Framework.BusinessLayer
                 string url;
 
                 String msg = "Today's Total Production for Plant : " + PlantName + " is " + EP + " .";
-                
-                url = "http://sms.versatilesmshub.com/api/mt/SendSMS?user=CSKInfotronix&password=CSK@123&senderid=SOLARX&channel=Trans&DCS=0&flashsms=0&number=9426666404," + mobile+"&text="+msg+"&route=1";
+
+                //url = "http://sms.versatilesmshub.com/api/mt/SendSMS?user=CSKInfotronix&password=CSK@123&senderid=SOLARX&channel=Trans&DCS=0&flashsms=0&number=9426666404," + mobile+"&text="+msg+"&route=1";
+
+                url = "http://sms.versatilesmshub.com/api/mt/SendSMS?user=websmithoffice&password=Web@12345&senderid=WEBSMH&channel=Trans&DCS=0&flashsms=0&number=9426666404," + mobile + "&text=" + msg + "&route=4";
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.AutomaticDecompression = DecompressionMethods.GZip;

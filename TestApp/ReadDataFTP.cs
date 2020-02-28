@@ -18,7 +18,7 @@ namespace Infotronix.TestApp
         {
             try
             {
-                 DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
+                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
                 //DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID = '00FAFB98-96EA-4F64-935D-4B963B402080')");
 
                 //string FolderName = dateTimePicker1.Value.ToString("yyyy-MM-dd"); //DateTime.Now.ToString("yyyy-MM-dd");
@@ -279,7 +279,7 @@ namespace Infotronix.TestApp
 
                                     string[] parsed = tempdate1.Split(' ');
 
-                                    para[j + 2, 1] = DeviceDate + " "+parsed[1];
+                                    para[j + 2, 1] = DeviceDate + " " + parsed[1];
                                 }
                                 else
                                 {
@@ -525,7 +525,7 @@ namespace Infotronix.TestApp
             try
             {
                 string[,] para = { { "SubDeviceId", SubDeviceId }, { "ErrorMessage", ex.Message.ToString() }, { "ErrorDetails", ex.ToString() } };
-                string sqlQue = "insert into     (DeviceErrorLogID,SubDeviceID,ErrorMessage,ErrorDetails) values (NEWID(),@SubDeviceID,@ErrorMessage,@ErrorDetails)";
+                string sqlQue = "insert into DeviceErrorLog(DeviceErrorLogID,SubDeviceID,ErrorMessage,ErrorDetails) values (NEWID(),@SubDeviceID,@ErrorMessage,@ErrorDetails)";
                 SqlHelper.ExecuteNoneQueryWithPera(sqlQue, para);
                 CommanClass.SendMail(ex, SubDeviceId);
             }
