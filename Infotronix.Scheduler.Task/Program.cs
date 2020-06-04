@@ -13,20 +13,18 @@ namespace Infotronix.Scheduler.Task
     {
         static void Main(string[] args)
         {
-            //if (args[0] == "sendmail")
+            try
             {
-                //Console.WriteLine("MailSending Intialized ....");
-                //using (BAL.DeviceDataBAL obj = new BAL.DeviceDataBAL())
-                //{
-                //    Console.WriteLine("Getting Energy Data....");
-                //    DateTime dttm = DateTime.Now;
-                //    dttm = DateTime.ParseExact(DateTime.Now.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                //    obj.GetDailyEnergyService(dttm, dttm);
-                //    Console.WriteLine("Getting Energy Data Completed....");
-                //}
-                BAL.SMTPManagement objSendMail = new BAL.SMTPManagement();
-                objSendMail.SendPlantDailyMail();
+                new PlantEmailLogic().SendPlantEmail();
             }
+            catch (Exception ee)
+            {
+                Console.WriteLine("ERROR in Main: " + ee.Message);
+            }
+
+            //BAL.SMTPManagement objSendMail = new BAL.SMTPManagement();
+
+            //objSendMail.SendPlantDailyMail();
         }
     }
 }
