@@ -133,9 +133,11 @@ namespace Infotronix
 
                                 SendEmail(ToEmailID, Subject, EmailBody);
 
-                                SendMessage(MobileNo, TotalEAC.ToString(), PlantName);
+                                //SendMessage(MobileNo, TotalEAC.ToString(), PlantName);
                             }
                         }
+
+                        System.Threading.Thread.Sleep(TimeSpan.FromMinutes(1));
                     }
                 }
             }

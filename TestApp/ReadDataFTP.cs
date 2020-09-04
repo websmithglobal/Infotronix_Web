@@ -18,8 +18,8 @@ namespace Infotronix.TestApp
         {
             try
             {
-                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
-                //DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID = '7644080E-A37A-4F91-AD31-20E55D7535DB')");
+                //DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
+                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID IN ('3626FBF6-A892-4591-9942-352B66AE67C7','74626E58-A1AC-41FF-A688-4B646C00652D','0E5F8E79-E8BB-406B-8DBE-4CCA38F7B501','3995CF18-4540-428D-BB37-4EFCF30E8E78','C83C26B6-B32A-4C4E-8480-8A4FB074C86A','D1380A48-2581-4F62-A1A4-B0FB0F11F0D7'))");
 
                 //string FolderName = dateTimePicker1.Value.ToString("yyyy-MM-dd"); //DateTime.Now.ToString("yyyy-MM-dd");
                 DateTime dtCurrentDateTime = DateTime.Now;
@@ -180,7 +180,7 @@ namespace Infotronix.TestApp
                                     {
                                         outDate = DateTime.Now;
                                     }
-                                    para[j + 2, 1] = outDate.ToString();
+                                    para[j + 2, 1] = outDate.ToString("yyyy-MM-dd HH:mm:ss");
                                 }
                                 //para[j + 2, 1] = DateTime.ParseExact(tempTable.Rows[i][dt.Rows[j]["ColumnName"].ToString()].ToString(), "yy-MM-dd HH:mm:ss", provider).ToString("yyyy-MM-dd HH:mm:ss");
                                 else
@@ -505,10 +505,13 @@ namespace Infotronix.TestApp
                                 }
                                 else
                                 {
-                                    DataRow dr = ds.Tables[TableName].NewRow();
-                                    for (int j = 0; j < RowVal.Length; j++)
-                                        dr[ds.Tables[TableName].Columns[j]] = RowVal[j];
-                                    ds.Tables[TableName].Rows.Add(dr);
+                                    if (!string.IsNullOrEmpty(TableName))
+                                    {
+                                        DataRow dr = ds.Tables[TableName].NewRow();
+                                        for (int j = 0; j < RowVal.Length; j++)
+                                            dr[ds.Tables[TableName].Columns[j]] = RowVal[j];
+                                        ds.Tables[TableName].Rows.Add(dr);
+                                    }
                                 }
                             }
                         }
