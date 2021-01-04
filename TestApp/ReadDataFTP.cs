@@ -19,7 +19,7 @@ namespace Infotronix.TestApp
             try
             {
                 //DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
-                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID IN ('79A7EA16-5D58-42FF-9250-2989A03F089C'))");
+                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID IN ('ABF9BB6F-8AD7-4015-902F-F81A18E8AA6B'))");
 
                 //string FolderName = dateTimePicker1.Value.ToString("yyyy-MM-dd"); //DateTime.Now.ToString("yyyy-MM-dd");
                 DateTime dtCurrentDateTime = DateTime.Now;
@@ -239,8 +239,15 @@ namespace Infotronix.TestApp
                     {
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            try { AccessColumn += dt.Rows[i]["ColumnName"].ToString() + ","; tempTable.Columns[dt.Rows[i]["CSVFileColumnName"].ToString()].ColumnName = dt.Rows[i]["ColumnName"].ToString(); }
-                            catch (Exception ex) { }
+                            try
+                            {
+                                AccessColumn += dt.Rows[i]["ColumnName"].ToString() + ",";
+                                tempTable.Columns[dt.Rows[i]["CSVFileColumnName"].ToString()].ColumnName = dt.Rows[i]["ColumnName"].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
                         }
                         AccessColumn = AccessColumn.Remove(AccessColumn.Length - 1, 1);
 
