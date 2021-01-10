@@ -19,7 +19,7 @@ namespace Infotronix.TestApp
             try
             {
                 //DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1");
-                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID IN ('ABF9BB6F-8AD7-4015-902F-F81A18E8AA6B'))");
+                DataTable dtFpt = SqlHelper.ExecuteProcedure("select SubDeviceId,FTPFolder,FTPFilename,FTPFileDateFormat,MultiplyConversation,DeviceType from SubDeviceMaster where Status = 1 and SubDeviceId in (select SubDeviceId from SubDeviceMaster where PlantID IN ('6A473E0B-C971-4762-8627-ED64FD108B1D'))");
 
                 //string FolderName = dateTimePicker1.Value.ToString("yyyy-MM-dd"); //DateTime.Now.ToString("yyyy-MM-dd");
                 DateTime dtCurrentDateTime = DateTime.Now;
